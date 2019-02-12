@@ -1,0 +1,10 @@
+public class KnightBoard {
+  int[][] board;
+
+  public KnightBoard(int startingRows, int startingCols) {
+    if (startingRows < 0 || startingCols < 0) throw new IllegalArgumentException("rows and columns must be positive.");
+    board = new int[startingRows][startingCols];
+  }
+
+  
+}
