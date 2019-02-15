@@ -6,5 +6,24 @@ public class KnightBoard {
     board = new int[startingRows][startingCols];
   }
 
-  
+  public String toString() {
+    String result = "";
+    for (int[] row: board) {
+      for (int i: row) {
+        if (i==0) {
+          result += "_";
+        } else {
+          result += i;
+        }
+      }
+      result += "\n";
+    }
+    return result;
+  }
+
+  public static void main(String[] args) {
+    KnightBoard k = new KnightBoard(4,5);
+    k.board[2][4] = 4;
+    System.out.println(k);
+  }
 }
