@@ -11,10 +11,12 @@ public class KnightBoard {
     for (int[] row: board) {
       for (int i: row) {
         if (i==0) {
-          result += "_";
+          result += "__";
         } else {
-          result += i;
+          if (i<10) result += "0"+i;
+          else result += i;
         }
+        result += " ";
       }
       result += "\n";
     }
@@ -61,6 +63,7 @@ public class KnightBoard {
           return true;
         }
         removeKnight(newR,newC);
+        num--;
       }
     }
     return false;
@@ -68,6 +71,8 @@ public class KnightBoard {
 
   public static void main(String[] args) {
     KnightBoard k = new KnightBoard(4,5);
+    //k.addKnight(3,4,14);
+    //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
     //k.addKnight(1,3,1);
     //k.removeKnight(2,4);
