@@ -35,6 +35,25 @@ public class KnightBoard {
     return i;
   }
 
+  public boolean solve() {
+
+  }
+
+  public boolean solve(int r, int c) {
+    int[] rMov = {2,2,-2,-2,1,1,-1,-1};
+    int[] cMov = {1,-1,1,-1,2,-2,2,-2};
+    for (int i=0;i<8;i++) {
+      int newR = r + rMov[i];
+      int newC = c + cMov[i];
+      if (addKnight(newR,newC)) {
+        if (solve(newR,newC)) {
+          return true;
+        }
+        removeKnight(newR,newC);
+      }
+    }
+  }
+
   public static void main(String[] args) {
     KnightBoard k = new KnightBoard(4,5);
     k.board[2][4] = 4;
