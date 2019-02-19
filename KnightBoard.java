@@ -34,15 +34,30 @@ public class KnightBoard {
     return false;
   }
 
+  private void clearBoard() {
+    for (int i=0;i<board.length;i++) {
+      for (int i2=0;i2<board[0].length;i2++) {
+      board[i][i2] = 0;
+      }
+    }
+  }
+
   private int removeKnight(int row, int col) {
     int i = board[row][col];
     board[row][col] = 0;
     return i;
   }
 
-  public boolean solve() {
-    addKnight(0,0,1);
-    return solve(0,0,1);
+  public boolean solve(int startingRow,int startingCol) {
+
+    for (int[] row: board) {
+      for (int i: row) {
+        if (i!=0) throw new IllegalStateException("board must be cleared.");
+      }
+    }
+
+    if (addKnight(startingRow,startingCol,1)) return solve(startingRow,startingCol,1);
+    throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
   }
 
   public boolean solve(int r, int c, int num) {
@@ -77,7 +92,7 @@ public class KnightBoard {
     //k.addKnight(1,3,1);
     //k.removeKnight(2,4);
     //System.out.println(k);
-    k.solve();
+    k.solve(3,4);
     System.out.println(k);
   }
 }
