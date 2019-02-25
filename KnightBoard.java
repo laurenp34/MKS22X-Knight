@@ -91,7 +91,10 @@ public class KnightBoard {
           }
         }
 
-        if (addKnight(startingRow,startingCol,1)) return countSolutions(startingRow,startingCol,1);
+        if (startingRow < board.length && startingRow >= 0 && startingCol < board[0].length && startingCol >= 0) {
+          addKnight(startingRow,startingCol,1);
+           return countSolutions(startingRow,startingCol,1);
+         }
         throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
   }
 
