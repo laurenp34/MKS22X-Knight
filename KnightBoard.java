@@ -84,15 +84,53 @@ public class KnightBoard {
     return false;
   }
 
+  public int countSolutions(int startingRow, int startingCol) {
+        for (int[] row: board) {
+          for (int i: row) {
+            if (i!=0) throw new IllegalStateException("board must be cleared.");
+          }
+        }
+
+        if (addKnight(startingRow,startingCol,1)) return countSolutions(startingRow,startingCol,1);
+        throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
+  }
+
+  public int countSolutions(int r, int c, int num) {
+    int count = 0;
+    //System.out.println("count: "+count);
+    if (num == board.length * board[0].length) {
+      //System.out.println(count+1);
+      System.out.println(this);
+      return 1;
+    }
+    int[] rMov = {2,2,-2,-2,1,1,-1,-1};
+    int[] cMov = {1,-1,1,-1,2,-2,2,-2};
+    for (int i=0;i<8;i++) {
+      int newR = r + rMov[i];
+      int newC = c + cMov[i];
+      //System.out.println("testing: "+newR+","+newC);
+      if (addKnight(newR,newC,num+1)) {
+        //System.out.println("placed: "+newR+","+newC);
+        //System.out.println(this);
+        num++;
+        //System.out.println("COUNT: "+count);
+        count += countSolutions(newR,newC,num);
+        removeKnight(newR,newC);
+        num--;
+      }
+    }
+    return count;
+  }
+
   public static void main(String[] args) {
-    KnightBoard k = new KnightBoard(4,5);
+    KnightBoard k = new KnightBoard(5,5);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
     //k.addKnight(1,3,1);
     //k.removeKnight(2,4);
     //System.out.println(k);
-    k.solve(3,4);
+    System.out.println(k.countSolutions(0,0));
     System.out.println(k);
   }
 }
