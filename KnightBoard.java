@@ -69,10 +69,10 @@ public class KnightBoard {
     for (int i=0;i<8;i++) {
       int newR = r + rMov[i];
       int newC = c + cMov[i];
-      System.out.println("testing: "+newR+","+newC);
+      //System.out.println("testing: "+newR+","+newC);
       if (addKnight(newR,newC,num+1)) {
-        System.out.println("placed: "+newR+","+newC);
-        System.out.println(this);
+        //System.out.println("placed: "+newR+","+newC);
+        //System.out.println(this);
         num++;
         if (solve(newR,newC,num)) {
           return true;
@@ -100,7 +100,7 @@ public class KnightBoard {
     //System.out.println("count: "+count);
     if (num == board.length * board[0].length) {
       //System.out.println(count+1);
-      System.out.println(this);
+      //System.out.println(this);
       return 1;
     }
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
