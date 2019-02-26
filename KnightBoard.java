@@ -125,8 +125,18 @@ public class KnightBoard {
     return count;
   }
 
+  private int countMoves(int r, int c) {
+    int[] rMov = {2,2,-2,-2,1,1,-1,-1};
+    int[] cMov = {1,-1,1,-1,2,-2,2,-2};
+    for (int i=0;i<8;i++) {
+      int newR = r+rMov[i];
+      int newC = c+cMov[i];
+    }
+    return 0;
+  }
+
   public static void main(String[] args) {
-    KnightBoard k = new KnightBoard(5,5);
+    KnightBoard k = new KnightBoard(7,7);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
