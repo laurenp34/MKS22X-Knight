@@ -161,10 +161,11 @@ public class KnightBoard {
     for (int i=0;i<8;i++) {
       int newR = r + rMov[i];
       int newC = c + cMov[i];
-      //System.out.println("testing: "+newR+","+newC);
+      System.out.println("testing: "+newR+","+newC);
       if (canAddKnight(newR,newC)) {
 
         int temp = countMoves(newR,newC);
+        System.out.println("\tmoves: "+temp);
         if (first || temp < next) {
           temp = next;
           nextR = newR;
@@ -175,16 +176,19 @@ public class KnightBoard {
       }
     }
     if (next != 0) {
+      System.out.println("Placing @: "+nextR+","+nextC);
       addKnight(nextR,nextC,num+1);
       num++;
       if (solveFast(nextR,nextC,num)) {
         return true;
       }
+      System.out.println("removing @" +nextR+","+nextC);
+      removeKnight(nextR,nextC);
+      num--;
     }
         //System.out.println("placed: "+newR+","+newC);
         //System.out.println(this);
-    removeKnight(nextR,nextC);
-    num--;
+
     return false;
   }
 
