@@ -169,8 +169,8 @@ public class KnightBoard {
     int count = 0;
     //System.out.println("count: "+count);
     if (num == board.length * board[0].length) {
-      System.out.println(count+1);
-      System.out.println(this);
+      //System.out.println(count+1);
+      //System.out.println(this);
       return 1;
     }
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
@@ -183,11 +183,11 @@ public class KnightBoard {
     for (int i=0;i<8;i++) {
       int newR = r + rMov[i];
       int newC = c + cMov[i];
-      System.out.println("testing: "+newR+","+newC);
+      //System.out.println("testing: "+newR+","+newC);
       if (canAddKnight(newR,newC)) {
 
         int val = countMoves(newR,newC);
-        System.out.println("\tcountMoves: "+val);
+        //System.out.println("\tcountMoves: "+val);
 
           vals[i] = val;
           rows[i] = newR;
@@ -197,22 +197,20 @@ public class KnightBoard {
       }
     }
     //sort
-    int last;
-    int curSmallest;
-    int lowestRow=0;
-    int lowestCol=0;
+    sort3(vals,rows,cols);
 
+    for (int i=0;i<vals.length;i++) {
+      if (vals[i] != 0) {
+        addKnight(rows[i],cols[i],num);
+        //.out.println("placed: "+rows[i]+","+cols[i]);
+        //System.out.println(this);
+        num++;
+        //System.out.println("COUNT: "+count);
+        count += countFast(rows[i],cols[i],num);
 
-    if (lowestRow >=0 && lowestCol >=0) {
-      addKnight(lowestRow,lowestCol,num);
-      System.out.println("placed: "+lowestRow+","+lowestCol);
-      System.out.println(this);
-      num++;
-      //System.out.println("COUNT: "+count);
-      count += countFast(lowestRow,lowestCol,num);
-
-      removeKnight(lowestRow,lowestCol);
-      num--;
+        removeKnight(rows[i],cols[i]);
+        num--;
+      }
     }
 
     return count;
@@ -250,6 +248,7 @@ public class KnightBoard {
     KnightBoard k = new KnightBoard(4,4);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
+    System.out.println(k.countFast(0,0));
     //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
