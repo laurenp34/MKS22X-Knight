@@ -1,3 +1,5 @@
+import java.io.*;
+import java.util.*;
 public class KnightBoard {
   int[][] board;
 
@@ -173,9 +175,10 @@ public class KnightBoard {
     }
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
     int[] cMov = {1,-1,1,-1,2,-2,2,-2};
-    int lowestRow=-1;
-    int lowestCol=-1;
-    int lowestVal=0;
+
+    int[] rows = new int[8];
+    int[] cols = new int[8];
+    int[] vals = new int[8];
     boolean first = true;
     for (int i=0;i<8;i++) {
       int newR = r + rMov[i];
@@ -186,14 +189,20 @@ public class KnightBoard {
         int val = countMoves(newR,newC);
         System.out.println("\tcountMoves: "+val);
 
-        if (val < lowestVal || first) {
-          lowestVal = val;
-          lowestRow = newR;
-          lowestCol = newC;
+          vals[i] = val;
+          rows[i] = newR;
+          cols[i] = newC;
           first = false;
-        }
+
       }
     }
+    //sort
+    int last;
+    int curSmallest;
+    int lowestRow=0;
+    int lowestCol=0;
+
+
     if (lowestRow >=0 && lowestCol >=0) {
       addKnight(lowestRow,lowestCol,num);
       System.out.println("placed: "+lowestRow+","+lowestCol);
@@ -209,12 +218,39 @@ public class KnightBoard {
     return count;
   }
 
+  private static void sort3(int[] vals, int[] a2, int[] a3) {
+    for (int i1=0;i1<8;i1++) {
+      int smallest=0;
+      int smIndex=0;
+      boolean first = true;
+      int temp;
+      for (int i2=i1;i2<8;i2++) {
+        if ((vals[i2] > 0 && first) || vals[i2] < smallest) {
+          smallest = vals[i2];
+          smIndex = i2;
+          first = false;
+        }
+      }
+      temp = vals[smIndex];
+      vals[smIndex]=vals[i1];
+      vals[i1] = temp;
+
+      temp = a2[smIndex];
+      a2[smIndex] = a2[i1];
+      a2[i1] = temp;
+
+      temp = a3[smIndex];
+      a3[smIndex] = a3[i1];
+      a3[i1] = temp;
+    }
+  }
+
 
   public static void main(String[] args) {
     KnightBoard k = new KnightBoard(4,4);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
-    k.countFast(0,0);
+    //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
@@ -223,5 +259,13 @@ public class KnightBoard {
     //System.out.println(k);
     //System.out.println(k.countSolutions(0,0));
     System.out.println(k);
+    int[] hi = {0, 6, 4, 2, 0, 3, 5, 0};
+    int[] hii = {3, 2, 5, 3, 4, 7, 8, 3};
+    int[] hiii = {4, 1, -1, 4, -5, 2, 8, 1};
+    sort3(hi,hii,hiii);
+    System.out.println(Arrays.toString(hi));
+    System.out.println(Arrays.toString(hii));
+    System.out.println(Arrays.toString(hiii));
+
   }
 }
