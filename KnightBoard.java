@@ -134,9 +134,58 @@ public class KnightBoard {
     return count;
   }
 
-  public boolean solveFast(int r, int c) {
+  public boolean solveFast(int startingRow,int startingCol) {
 
-    
+    for (int[] row: board) {
+      for (int i: row) {
+        if (i!=0) throw new IllegalStateException("board must be cleared.");
+      }
+    }
+
+    if (addKnight(startingRow,startingCol,1)) return solveFast(startingRow,startingCol,1);
+    throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
+  }
+
+  public boolean solveFast(int r, int c, int num) {
+    if (num == board.length * board[0].length) {
+      return true;
+    }
+    int[] rMov = {2,2,-2,-2,1,1,-1,-1};
+    int[] cMov = {1,-1,1,-1,2,-2,2,-2};
+
+    int next = 0;
+    int nextR = 0;
+    int nextC = 0;
+    boolean first = true;
+
+    for (int i=0;i<8;i++) {
+      int newR = r + rMov[i];
+      int newC = c + cMov[i];
+      //System.out.println("testing: "+newR+","+newC);
+      if (canAddKnight(newR,newC)) {
+
+        int temp = countMoves(newR,newC);
+        if (first || temp < next) {
+          temp = next;
+          nextR = newR;
+          nextC = newC;
+          first = false;
+
+        }
+      }
+    }
+    if (next != 0) {
+      addKnight(nextR,nextC,num+1);
+      num++;
+      if (solveFast(nextR,nextC,num)) {
+        return true;
+      }
+    }
+        //System.out.println("placed: "+newR+","+newC);
+        //System.out.println(this);
+    removeKnight(nextR,nextC);
+    num--;
+    return false;
   }
 
   private int countMoves(int r, int c) {
@@ -253,14 +302,14 @@ public class KnightBoard {
     KnightBoard k = new KnightBoard(4,4);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
-    System.out.println(k.countFast(0,0));
+    System.out.println(k.solveFast(0,0));
     //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
     //k.addKnight(1,3,1);
     //k.removeKnight(2,4);
-    //System.out.println(k);
+    //System.out.println(k);countFast(0,0)
     //System.out.println(k.countSolutions(0,0));
     System.out.println(k);
     int[] hi = {0, 6, 4, 2, 0, 3, 5, 0};
