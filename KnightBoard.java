@@ -34,6 +34,13 @@ public class KnightBoard {
     return false;
   }
 
+  private boolean canAddKnight(int row, int col) {
+    if (row >= board.length || col >= board[0].length || row < 0 || col < 0 || board[row][col] != 0) {
+      return false;
+    }
+    return true;
+  }
+
   private void clearBoard() {
     for (int i=0;i<board.length;i++) {
       for (int i2=0;i2<board[0].length;i2++) {
@@ -141,17 +148,80 @@ public class KnightBoard {
     return count;
   }
 
+
+  public int countFast(int startingRow, int startingCol) {
+        for (int[] row: board) {
+          for (int i: row) {
+            if (i!=0) throw new IllegalStateException("board must be cleared.");
+          }
+        }
+
+        if (startingRow < board.length && startingRow >= 0 && startingCol < board[0].length && startingCol >= 0) {
+          addKnight(startingRow,startingCol,1);
+           return countFast(startingRow,startingCol,2);
+         }
+        throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
+  }
+
+  public int countFast(int r, int c, int num) {
+    int count = 0;
+    //System.out.println("count: "+count);
+    if (num == board.length * board[0].length) {
+      System.out.println(count+1);
+      System.out.println(this);
+      return 1;
+    }
+    int[] rMov = {2,2,-2,-2,1,1,-1,-1};
+    int[] cMov = {1,-1,1,-1,2,-2,2,-2};
+    int lowestRow=-1;
+    int lowestCol=-1;
+    int lowestVal=0;
+    boolean first = true;
+    for (int i=0;i<8;i++) {
+      int newR = r + rMov[i];
+      int newC = c + cMov[i];
+      System.out.println("testing: "+newR+","+newC);
+      if (canAddKnight(newR,newC)) {
+
+        int val = countMoves(newR,newC);
+        System.out.println("\tcountMoves: "+val);
+
+        if (val < lowestVal || first) {
+          lowestVal = val;
+          lowestRow = newR;
+          lowestCol = newC;
+          first = false;
+        }
+      }
+    }
+    if (lowestRow >=0 && lowestCol >=0) {
+      addKnight(lowestRow,lowestCol,num);
+      System.out.println("placed: "+lowestRow+","+lowestCol);
+      System.out.println(this);
+      num++;
+      //System.out.println("COUNT: "+count);
+      count += countFast(lowestRow,lowestCol,num);
+
+      removeKnight(lowestRow,lowestCol);
+      num--;
+    }
+
+    return count;
+  }
+
+
   public static void main(String[] args) {
-    KnightBoard k = new KnightBoard(7,7);
-    System.out.println(k.countMoves(0,0));
+    KnightBoard k = new KnightBoard(4,4);
+    //System.out.println(k.countMoves(0,0));
     System.out.println(k);
+    k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
     //k.addKnight(1,3,1);
     //k.removeKnight(2,4);
     //System.out.println(k);
-    System.out.println(k.countSolutions(0,0));
+    //System.out.println(k.countSolutions(0,0));
     System.out.println(k);
   }
 }
