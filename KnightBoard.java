@@ -134,6 +134,11 @@ public class KnightBoard {
     return count;
   }
 
+  public boolean solveFast(int r, int c) {
+
+    
+  }
+
   private int countMoves(int r, int c) {
     int count = 0;
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
