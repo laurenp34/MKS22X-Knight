@@ -126,17 +126,25 @@ public class KnightBoard {
   }
 
   private int countMoves(int r, int c) {
+    int count = 0;
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
     int[] cMov = {1,-1,1,-1,2,-2,2,-2};
     for (int i=0;i<8;i++) {
       int newR = r+rMov[i];
       int newC = c+cMov[i];
+
+      if (addKnight(newR, newC, 0)){
+        count ++;
+        removeKnight(newR,newC);
+      }
     }
-    return 0;
+    return count;
   }
 
   public static void main(String[] args) {
     KnightBoard k = new KnightBoard(7,7);
+    System.out.println(k.countMoves(0,0));
+    System.out.println(k);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
     //k.board[2][4] = 4;
