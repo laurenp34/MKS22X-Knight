@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 public class KnightBoard {
   int[][] board;
+  //Square[][] sBoard;
 
   public KnightBoard(int startingRows, int startingCols) {
     if (startingRows < 0 || startingCols < 0) throw new IllegalArgumentException("rows and columns must be positive.");
@@ -133,6 +134,22 @@ public class KnightBoard {
     }
     return count;
   }
+  private void wait(int millis){
+     try {
+         Thread.sleep(millis);
+     }
+     catch (InterruptedException e) {
+     }
+ }
+
+
+public void clearTerminal(){
+
+    //erase terminal, go to top left of screen.
+
+    System.out.println("\033[2J\033[1;1H");
+
+}
 
   public boolean solveFast(int startingRow,int startingCol) {
 
@@ -147,59 +164,62 @@ public class KnightBoard {
   }
 
   public boolean solveFast(int r, int c, int num) {
-    System.out.println(this);
+    //System.out.println(this);
     if (num == board.length * board[0].length) {
       return true;
     }
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
     int[] cMov = {1,-1,1,-1,2,-2,2,-2};
 
-    int[] rows = new int[8];
-    int[] cols = new int[8];
-    int[] vals = new int[8];
-    boolean first = true;
+    ArrayList<Square> moves = new ArrayList<Square>();
 
     for (int i=0;i<8;i++) {
       int newR = r + rMov[i];
       int newC = c + cMov[i];
-      System.out.println("testing: "+newR+","+newC);
-      if (canAddKnight(newR,newC)) {
+      //System.out.println("testing: "+newR+","+newC);
+      if (canAddKnight(newR,newC) && countMoves(newR,newC) != 0) {
 
-        int val = countMoves(newR,newC);
-        System.out.println("\tcountMoves: "+val);
 
-          vals[i] = val;
-          rows[i] = newR;
-          cols[i] = newC;
-          first = false;
+
+        Square temp = new Square(newR,newC,countMoves(newR,newC));
+        moves.add(temp);
+        //System.out.println("\tcountMoves: "+val);
 
       }
     }
-    System.out.println("rows: "+Arrays.toString(rows));
-    System.out.println("cols: "+Arrays.toString(cols));
-    sort3(vals,rows,cols);
-    System.out.println("rows: "+Arrays.toString(rows));
-    System.out.println("cols: "+Arrays.toString(cols));
+    //System.out.println("rows: "+Arrays.toString(rows));
+    //System.out.println("cols: "+Arrays.toString(cols));
+    //sort3(vals,rows,cols);
+    //System.out.println("rows: "+Arrays.toString(rows));
+    //System.out.println("cols: "+Arrays.toString(cols));
+    /*
     int moves = 0;
     for (int i=0;i<vals.length;i++) {
       if (vals[i] > 0) moves ++;
     }
+    */
+    //Collections.sort(moves);
 
-    for (int i=0;i<moves;i++) {
+    for (int i=0;i<moves.size();i++) {
+      Square cur = moves.get(i);
 
-      int nextR = rows[i];
-      int nextC = cols[i];
+      int nextR = cur.getRow();
+      int nextC = cur.getCol();
 
-      System.out.println("Placing @: "+nextR+","+nextC);
-      System.out.println(this);
+    //  System.out.println("Placing @: "+nextR+","+nextC);
+      //System.out.println(this);
       addKnight(nextR,nextC,num+1);
-      num++;
-      if (solveFast(nextR,nextC,num)) {
+
+                clearTerminal();
+                System.out.println(this);
+
+                wait(20);
+
+      if (solveFast(nextR,nextC,num+1)) {
         return true;
       }
-      System.out.println("removing @" +nextR+","+nextC);
+    //  System.out.println("removing @" +nextR+","+nextC);
       removeKnight(nextR,nextC);
-      num--;
 
   }
         //System.out.println("placed: "+newR+","+newC);
@@ -326,10 +346,10 @@ public class KnightBoard {
 
 
   public static void main(String[] args) {
-    KnightBoard k = new KnightBoard(20,20);
+    KnightBoard k = new KnightBoard(4,5);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
-    System.out.println(k.solve(0,0));
+    System.out.println(k.solveFast(0,0));
     //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
