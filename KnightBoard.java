@@ -37,7 +37,7 @@ public class KnightBoard {
   }
 
   private boolean canAddKnight(int row, int col) {
-    if (row >= board.length || col >= board[0].length || row < 0 || col < 0 || board[row][col] != 0) {
+    if (row >= board.length || col >= board[0].length || row < 0 || col < 0 || board[row][col] != 0)   {
       return false;
     }
     return true;
@@ -147,15 +147,16 @@ public class KnightBoard {
   }
 
   public boolean solveFast(int r, int c, int num) {
+    System.out.println(this);
     if (num == board.length * board[0].length) {
       return true;
     }
     int[] rMov = {2,2,-2,-2,1,1,-1,-1};
     int[] cMov = {1,-1,1,-1,2,-2,2,-2};
 
-    int next = 0;
-    int nextR = 0;
-    int nextC = 0;
+    int[] rows = new int[8];
+    int[] cols = new int[8];
+    int[] vals = new int[8];
     boolean first = true;
 
     for (int i=0;i<8;i++) {
@@ -164,19 +165,33 @@ public class KnightBoard {
       System.out.println("testing: "+newR+","+newC);
       if (canAddKnight(newR,newC)) {
 
-        int temp = countMoves(newR,newC);
-        System.out.println("\tmoves: "+temp);
-        if (first || temp < next) {
-          temp = next;
-          nextR = newR;
-          nextC = newC;
+        int val = countMoves(newR,newC);
+        System.out.println("\tcountMoves: "+val);
+
+          vals[i] = val;
+          rows[i] = newR;
+          cols[i] = newC;
           first = false;
 
-        }
       }
     }
-    if (next != 0) {
+    System.out.println("rows: "+Arrays.toString(rows));
+    System.out.println("cols: "+Arrays.toString(cols));
+    sort3(vals,rows,cols);
+    System.out.println("rows: "+Arrays.toString(rows));
+    System.out.println("cols: "+Arrays.toString(cols));
+    int moves = 0;
+    for (int i=0;i<vals.length;i++) {
+      if (vals[i] > 0) moves ++;
+    }
+
+    for (int i=0;i<moves;i++) {
+
+      int nextR = rows[i];
+      int nextC = cols[i];
+
       System.out.println("Placing @: "+nextR+","+nextC);
+      System.out.println(this);
       addKnight(nextR,nextC,num+1);
       num++;
       if (solveFast(nextR,nextC,num)) {
@@ -185,11 +200,13 @@ public class KnightBoard {
       System.out.println("removing @" +nextR+","+nextC);
       removeKnight(nextR,nextC);
       num--;
-    }
+
+  }
         //System.out.println("placed: "+newR+","+newC);
         //System.out.println(this);
 
     return false;
+
   }
 
   private int countMoves(int r, int c) {
@@ -200,9 +217,9 @@ public class KnightBoard {
       int newR = r+rMov[i];
       int newC = c+cMov[i];
 
-      if (addKnight(newR, newC, 0)){
+      if (canAddKnight(newR,newC)){
         count ++;
-        removeKnight(newR,newC);
+
       }
     }
     return count;
@@ -279,14 +296,19 @@ public class KnightBoard {
       int smallest=0;
       int smIndex=0;
       boolean first = true;
+      boolean found = false;
       int temp;
       for (int i2=i1;i2<8;i2++) {
-        if ((vals[i2] > 0 && first) || vals[i2] < smallest) {
+        if ((vals[i2] > 0 && first) || (vals[i2] > 0 && vals[i2] < smallest)) {
+          //System.out.println("smallest sofar: "+vals[i2]);
           smallest = vals[i2];
           smIndex = i2;
           first = false;
+          found = true;
         }
       }
+      if (found) {
+        //System.out.println("overall smallest: "+vals[smIndex]);
       temp = vals[smIndex];
       vals[smIndex]=vals[i1];
       vals[i1] = temp;
@@ -299,14 +321,15 @@ public class KnightBoard {
       a3[smIndex] = a3[i1];
       a3[i1] = temp;
     }
+    }
   }
 
 
   public static void main(String[] args) {
-    KnightBoard k = new KnightBoard(4,4);
+    KnightBoard k = new KnightBoard(20,20);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
-    System.out.println(k.solveFast(0,0));
+    System.out.println(k.solve(0,0));
     //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
@@ -316,13 +339,15 @@ public class KnightBoard {
     //System.out.println(k);countFast(0,0)
     //System.out.println(k.countSolutions(0,0));
     System.out.println(k);
-    int[] hi = {0, 6, 4, 2, 0, 3, 5, 0};
+    /*
+    int[] hi = {0, 0, 0, 0, 0, 3, 0, 1};
     int[] hii = {3, 2, 5, 3, 4, 7, 8, 3};
     int[] hiii = {4, 1, -1, 4, -5, 2, 8, 1};
     sort3(hi,hii,hiii);
     System.out.println(Arrays.toString(hi));
     System.out.println(Arrays.toString(hii));
     System.out.println(Arrays.toString(hiii));
+    */
 
   }
 }
