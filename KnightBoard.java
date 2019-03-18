@@ -103,7 +103,9 @@ public class KnightBoard {
 
         if (startingRow < board.length && startingRow >= 0 && startingCol < board[0].length && startingCol >= 0) {
           addKnight(startingRow,startingCol,1);
-           return countSolutions(startingRow,startingCol,1);
+           int val = countSolutions(startingRow,startingCol,1);
+           clearBoard();
+           return val;
          }
         throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
   }
@@ -209,11 +211,11 @@ public void clearTerminal(){
     //  System.out.println("Placing @: "+nextR+","+nextC);
       //System.out.println(this);
       addKnight(nextR,nextC,num+1);
-
+                /*
                 clearTerminal();
                 System.out.println(this);
 
-                wait(20);
+                wait(20);*/
 
       if (solveFast(nextR,nextC,num+1)) {
         return true;
@@ -255,7 +257,9 @@ public void clearTerminal(){
 
         if (startingRow < board.length && startingRow >= 0 && startingCol < board[0].length && startingCol >= 0) {
           addKnight(startingRow,startingCol,1);
-           return countFast(startingRow,startingCol,2);
+           int val = countFast(startingRow,startingCol,2);
+           clearBoard();
+           return val;
          }
         throw new IllegalArgumentException("startingRow and startingCol must be in bounds");
   }
@@ -349,7 +353,7 @@ public void clearTerminal(){
     KnightBoard k = new KnightBoard(4,5);
     //System.out.println(k.countMoves(0,0));
     System.out.println(k);
-    System.out.println(k.solveFast(0,0));
+    System.out.println(k.countSolutions(0,0));
     //k.countFast(0,0);
     //k.addKnight(3,4,14);
     //k.addKnight(1,2,3);
